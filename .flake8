@@ -1,0 +1,2 @@
+[flake8]
+exclude=base.py, develop.py,production.py,urls.py,celery.py,swagger.py,v1.py,choices.py,v2.py, *migrations/
