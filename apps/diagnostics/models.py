@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.dockot.models import Doctors
+from apps.doctor.models import Doctors
 from apps.patient.models import Patients
 from apps.shared.models import TimeStampedModel
 
