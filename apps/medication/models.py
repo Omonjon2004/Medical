@@ -7,7 +7,7 @@ from apps.shared.models import TimeStampedModel
 
 
 class Medications(TimeStampedModel):
-    name = models.CharField()
+    name = models.CharField(max_length=255)
     description = models.TextField()
     DOSAGE_FORM_CHOICES = (
         ('SYRUP', 'Syrup'),

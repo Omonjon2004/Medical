@@ -6,8 +6,9 @@ from apps.shared.models import TimeStampedModel
 
 
 class Users(AbstractUser, TimeStampedModel):
+    username = None
+    full_name = models.CharField(max_length=255,)
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=13, unique=True)
     ROLE_CHOICES = (
         ('ADMIN', 'Admin'),
         ('PATIENT', 'Patient'),
@@ -16,15 +17,17 @@ class Users(AbstractUser, TimeStampedModel):
     role = models.CharField(max_length=10,
                             choices=ROLE_CHOICES,
                             default='PATIENT')
-
-    avatar = models.ImageField(upload_to='avatars/')
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.get_full_name()
+        return self.full_name
 
+class UserProfile(TimeStampedModel):
+    user = models.OneToOneField(Users, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=13, unique=True,null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/')
+    bio = models.TextField()
 
 class UserCards(TimeStampedModel):
     card_name = models.CharField(max_length=50)
