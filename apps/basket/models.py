@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.account.models import Users
+from apps.account_.models import Users
 from apps.medication.models import Medications
 from apps.shared.models import TimeStampedModel
 

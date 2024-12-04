@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'account_.Users'
 # Application definition
 
 DJANGO_APPS = [
@@ -38,7 +39,7 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 CUSTOM_APPS = [
-    'apps.account',
+    'apps.account_',
     'apps.basket',
     'apps.appointment',
     'apps.diagnostics',
@@ -49,11 +50,43 @@ CUSTOM_APPS = [
 
 ]
 THIRD_PARTY_APPS = [
-    'rest_framework',
     'drf_yasg',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'dj_rest_auth.registration',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
+SITE_ID = 1
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # username maydonini o'chirib qo'yish
+ACCOUNT_USERNAME_REQUIRED = False  # Username talab qilinmaydi
+ACCOUNT_EMAIL_REQUIRED = True  # Faqat email ishlatiladi
+ACCOUNT_AUTHENTICATION_METHOD = 'email'  # Autentifikatsiya uchun email
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': 'YOUR_GOOGLE_CLIENT_ID',
+            'secret': 'YOUR_GOOGLE_SECRET',
+            'key': ''
+        }
+    },
+    'facebook': {
+        'APP': {
+            'client_id': 'YOUR_FACEBOOK_CLIENT_ID',
+            'secret': 'YOUR_FACEBOOK_SECRET',
+            'key': ''
+        }
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -63,9 +96,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',  # Qo'shildi
 ]
-
-AUTH_USER_MODEL='account.Users'
 
 ROOT_URLCONF = 'config.urls'
 
@@ -89,7 +121,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+REST_AUTH_TOKEN_MODEL = None
 
 DATABASES = {
     'default': {

@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField
 
-from apps.account.models import Users
+from apps.account_.models import Users
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

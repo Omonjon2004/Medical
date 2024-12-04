@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import ForeignKey
 
-from apps.account.models import Users
+from apps.account_.models import Users
 from apps.shared.models import TimeStampedModel
 
 
