@@ -8,6 +8,7 @@ from apps.account_.models import Users
 class RegistrationSerializer(serializers.ModelSerializer):
     password = CharField(write_only=True)
     confirm_password = CharField(write_only=True)
+
     class Meta:
         model = Users
         fields = ('id',

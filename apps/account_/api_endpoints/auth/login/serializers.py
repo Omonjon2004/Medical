@@ -12,8 +12,8 @@ class LoginSerializer(TokenObtainPairSerializer):
         email = attrs.get("email")
         password = attrs.get("password")
 
-
-        user = authenticate(username=email, password=password)
+        user = authenticate(username=email,
+                            password=password)
         if not user:
             raise ValidationError({"error": "Password is incorrect"})
 

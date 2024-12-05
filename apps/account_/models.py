@@ -7,7 +7,7 @@ from apps.shared.models import TimeStampedModel
 
 class Users(AbstractUser, TimeStampedModel):
     username = None
-    full_name = models.CharField(max_length=255,)
+    full_name = models.CharField(max_length=255, )
     email = models.EmailField(unique=True)
     ROLE_CHOICES = (
         ('ADMIN', 'Admin'),
@@ -23,11 +23,13 @@ class Users(AbstractUser, TimeStampedModel):
     def __str__(self):
         return self.full_name
 
+
 class UserProfile(TimeStampedModel):
     user = models.OneToOneField(Users, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=13, unique=True,null=True, blank=True)
+    phone_number = models.CharField(
+        max_length=13, unique=True, null=True, blank=True)
     avatar = models.ImageField(upload_to='avatars/')
-    bio = models.TextField()
+
 
 class UserCards(TimeStampedModel):
     card_name = models.CharField(max_length=50)
