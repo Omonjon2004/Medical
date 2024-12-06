@@ -43,13 +43,41 @@ class DoctorUpdateSerializer(serializers.ModelSerializer):
 
 
 class DoctorListSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Doctors
         fields = (
             'id',
+            'full_name',
             'specialization',
             'experience_years',
             'available_times',
             'ratings',
             'bio'
         )
+
+    def get_full_name(self, obj):
+        return obj.user_id.full_name
+
+
+class DoctorDetailSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Doctors
+        fields = (
+
+            'id',
+            'full_name',
+            'specialization',
+            'bio'
+        )
+        extra_kwargs = {
+            'full_name': {'read_only': True},
+            'bio': {'read_only': True},
+            'specialization': {'read_only': True},
+        }
+
+    def get_full_name(self, obj):
+        return obj.user_id.full_name
