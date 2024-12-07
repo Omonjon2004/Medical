@@ -1,63 +1,47 @@
-from rest_framework import generics
-from rest_framework.exceptions import NotAuthenticated, PermissionDenied
+from rest_framework.decorators import action
+from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
-from apps.account_.api_endpoints.user_profile.serializers import (
-    UserProfileCreateSerializer,
-    UserProfileUpdateSerializer,
-    UserProfileDetailsSerializer,
-)
-from apps.account_.models import UserProfile
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+
+from apps.account_.api_endpoints.user_profile.serializers import UserProfileSerializer
+from apps.account_.models import Users, UserProfile
 
 
-class UserProfileCreateAPIView(generics.CreateAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileCreateSerializer
+class ProfileViewSet(viewsets.ViewSet):
+    queryset = Users.objects.all().order_by('id')
+    serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    @action(methods=["get"], detail=False)
+    def user_profile(self, *args, **kwargs):
+        user_profile = get_object_or_404(UserProfile, user=self.request.user)
+        serializer = UserProfileSerializer(user_profile)
+        return Response(serializer.data)
 
+    @action(methods=["put", "patch"], detail=False)
+    def update_profile(self, request, *args, **kwargs):
+        # Foydalanuvchining profilini oling
+        user_profile = get_object_or_404(UserProfile, user=request.user)
 
-class UserProfileUpdateAPIView(generics.UpdateAPIView):
-    serializer_class = UserProfileUpdateSerializer
-    permission_classes = [IsAuthenticated]
+        # Ma'lumotlarni yangilang
+        serializer = UserProfileSerializer(user_profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get_queryset(self):
+    def destroy(self, request, *args, **kwargs):
+        account = get_object_or_404(Users, pk=self.request.user.id)
+        self.perform_destroy(account)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-        if getattr(self, 'swagger_fake_view', False):
-            return UserProfile.objects.none()
+    def perform_destroy(self, instance):
+        instance.delete()
 
-
-        if not self.request.user.is_authenticated:
-            raise NotAuthenticated("The user is not authenticated.")
-
-
-        return UserProfile.objects.filter(user=self.request.user)
-
-
-class UserProfileRetrieveAPIView(generics.RetrieveAPIView):
-
-    serializer_class = UserProfileDetailsSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return UserProfile.objects.filter(user=self.request.user)
-
-
-class UserProfileListAPIView(generics.ListAPIView):
-    serializer_class = UserProfileDetailsSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        if self.request.user.role == 'ADMIN':
-            return UserProfile.objects.all()
-
-        raise PermissionDenied("You do not have access to this information")
-
-
-class UserProfileDeleteAPIView(generics.DestroyAPIView):
-    serializer_class = UserProfileDetailsSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return UserProfile.objects.filter(user=self.request.user)
+    # @action(methods=["post"], detail=False)
+    # def account_exit(self, *args, **kwargs):
+    #     account = get_object_or_404(Users, pk=self.request.user.id)
+    #     account.is_active = False
+    #     account.save()
+    #     return Response(status=status.HTTP_200_OK)

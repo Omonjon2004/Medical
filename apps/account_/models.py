@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
 
+from apps.account_.manager import CustomUserManager
 from apps.shared.models import TimeStampedModel
 
 
@@ -16,9 +17,12 @@ class Users(AbstractUser, TimeStampedModel):
     )
     role = models.CharField(max_length=10,
                             choices=ROLE_CHOICES,
-                            default='PATIENT')
+                            default='PATIENT'
+                        )
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.full_name
