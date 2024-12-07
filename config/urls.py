@@ -24,8 +24,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('apps.account_.urls.v1')),
     path('api/userprofile/', include('apps.account_.urls.v2')),
+    path('api/user/activation', include('apps.account_.urls.v3')),
     path('api/doctor/', include('apps.doctor.urls.v1')),
     path('api/patient/', include('apps.patient.urls.v1')),
+
 ]
 
 urlpatterns+=swagger_urlpatterns
