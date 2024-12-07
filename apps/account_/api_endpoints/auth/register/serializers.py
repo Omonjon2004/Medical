@@ -19,8 +19,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
                   'confirm_password',
                   )
         extra_kwargs = {
-            'role': {'read_only': True},
-            'password': {'<PASSWORD>': True},
+            'password': {'read_only': True},
         }
 
     def validate_email(self, email):
@@ -43,6 +42,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             role=validated_data['role'],
         )
+        account.is_active=False
         account.set_password(validated_data['password'])
         account.save()
         return account
