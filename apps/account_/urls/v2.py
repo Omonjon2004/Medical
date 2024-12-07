@@ -1,13 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
 
-from apps.account_.api_endpoints.user_profile import UserProfileUpdateAPIView, UserProfileRetrieveAPIView, \
-    UserProfileListAPIView
-from apps.account_.api_endpoints.user_profile.views import UserProfileCreateAPIView, UserProfileDeleteAPIView
+from apps.account_.api_endpoints.user_profile import ProfileViewSet
+
+router.register(r'profile', ProfileViewSet, basename='profile')
 
 urlpatterns = [
-    path('userprofile-create/',UserProfileCreateAPIView.as_view(),name='userprofile-create'),
-    path('userprofile-update/<int:pk>/', UserProfileUpdateAPIView.as_view(), name='userprofile-update'),
-    path('userprofile-detail/<int:pk>/',UserProfileRetrieveAPIView.as_view(),name='userprofile-detail'),
-    path('userprolife-list/',UserProfileListAPIView.as_view(),name='userprofile-list'),
-    path('userprofile-delete/<int:pk>/',UserProfileDeleteAPIView.as_view(),name='userprofile-delete'),
+    path('', include(router.urls)),
+
 ]

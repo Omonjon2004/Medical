@@ -26,6 +26,12 @@ SECRET_KEY = 'django-insecure-l*4wd3pom3md^hzbgf+50bu(3#)42+oda=)29=hy9@*jjte7_=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
+
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'account_.Users'
@@ -98,7 +104,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # Qo'shildi
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -120,6 +126,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.getenv("SENDER_EMAIL")
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
