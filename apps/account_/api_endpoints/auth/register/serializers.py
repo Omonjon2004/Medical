@@ -42,7 +42,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             role=validated_data['role'],
         )
-        account.is_active=False
+        account.is_active = False
         account.set_password(validated_data['password'])
         account.save()
         return account

@@ -5,7 +5,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.account_.api_endpoints.forgot_password.serializers import ForgotPasswordSerializers
+from apps.account_.api_endpoints.forgot_password.serializers import (
+    ForgotPasswordSerializers)
 from apps.account_.models import Users
 from apps.account_.tasks import send_forgot_password_code
 
@@ -19,13 +20,13 @@ class ForgotPasswordAPIView(APIView):
     def post(self, request):
         serializer = ForgotPasswordSerializers(data=request.data)
         if serializer.is_valid():
-            # Yangi parol yaratish
+
             new_password = get_random_string(length=8)
-            user = Users.objects.get(email=serializer.validated_data['email'])
+            user = Users.objects.get(
+                email=serializer.validated_data['email'])
             user.set_password(new_password)
             user.save()
 
-            # Celery vazifasini to'g'ri chaqirish
             send_forgot_password_code.delay(
                 email=request.data['email'],
                 subject="Please change your password "
@@ -35,7 +36,8 @@ class ForgotPasswordAPIView(APIView):
 
             return Response("New password has been sent", status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 __all__ = ("ForgotPasswordAPIView",)

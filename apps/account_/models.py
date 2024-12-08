@@ -18,7 +18,7 @@ class Users(AbstractUser, TimeStampedModel):
     role = models.CharField(max_length=10,
                             choices=ROLE_CHOICES,
                             default='PATIENT'
-                        )
+                            )
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
