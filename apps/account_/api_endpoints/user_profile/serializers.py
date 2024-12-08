@@ -24,8 +24,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'id': {'read_only': True},
             'role': {'read_only': True},
+            'email': {'read_only': True},
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
+
         }
 
     def get_full_name(self, obj):
