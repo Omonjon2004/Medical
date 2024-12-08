@@ -24,7 +24,6 @@ class MedicationListAPIView(ListAPIView):
     serializer_class = MedicationSerializer
     queryset = Medications.objects.all()
     permission_classes = (IsAuthenticated,)
-
     def get_queryset(self):
         queryset = super().get_queryset()
         name = self.request.query_params.get('name')
