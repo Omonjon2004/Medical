@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.generics import (
     CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView)
 
-from apps.doctor.api_endpoints.serializers import (
+from apps.doctor.api_endpoints.doctor_crud.serializers import (
     DoctorCreateSerializer, DoctorUpdateSerializer,
     DoctorListSerializer, DoctorDetailSerializer, )
 from apps.doctor.models import Doctors
