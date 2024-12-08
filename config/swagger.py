@@ -9,7 +9,7 @@ from rest_framework import permissions
 # Schema view konfiguratsiyasi
 schema_view = get_schema_view(
     openapi.Info(
-        title="Poll API",
+        title="Medical API",
         default_version="v1",
         description="API for managing polls",
         terms_of_service="https://www.google.com/policies/terms/",
