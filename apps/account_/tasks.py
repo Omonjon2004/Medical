@@ -1,12 +1,12 @@
 import os
 import random
 from dotenv import load_dotenv
-load_dotenv()
-
 from django.core.mail import send_mail
 from django.core.cache import cache
 
 from config.celery import app
+
+load_dotenv()
 
 
 @app.task(bind=True, ignore_result=True)
