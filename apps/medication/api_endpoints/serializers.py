@@ -23,5 +23,3 @@ class MedicationSerializer(serializers.ModelSerializer):
             'updated_at': {'read_only': True},
             'id': {'read_only': True},
         }
-
-
