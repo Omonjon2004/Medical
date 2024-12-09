@@ -9,7 +9,6 @@ class DoctorCreateSerializer(serializers.ModelSerializer):
             'user_id',
             'specialization',
             'experience_years',
-            'available_times',
             'ratings',
             'bio',
             'created_at',
@@ -28,7 +27,6 @@ class DoctorUpdateSerializer(serializers.ModelSerializer):
             'user_id',
             'specialization',
             'experience_years',
-            'available_times',
             'ratings',
             'bio',
             'created_at',
@@ -52,7 +50,6 @@ class DoctorListSerializer(serializers.ModelSerializer):
             'full_name',
             'specialization',
             'experience_years',
-            'available_times',
             'ratings',
             'bio'
         )
