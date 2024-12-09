@@ -4,9 +4,11 @@ from django.db.models.functions import Cast
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 
-from apps.doctor.api_endpoints.doctor_search.serializers import DoctorSearchSerializer
+from apps.doctor \
+    .api_endpoints.doctor_search.serializers import (
+    DoctorSearchSerializer)
 from apps.doctor.models import Doctors
 
 
@@ -33,7 +35,9 @@ class DoctorSearchAPIView(ListAPIView):
             )
         if specialization:
             queryset = (
-                queryset.annotate(sim=TrigramSimilarity('specialization', specialization))
+                queryset.annotate(
+                    sim=TrigramSimilarity
+                    ('specialization', specialization))
                 .filter(sim__gte=0.2)
                 .order_by('-sim')
             )

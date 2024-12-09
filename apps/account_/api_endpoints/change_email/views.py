@@ -4,7 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from apps.account_.api_endpoints.change_email.serializers import ChangeEmailSerializer
+from apps.account_.api_endpoints \
+    .change_email.serializers import ChangeEmailSerializer
 
 
 class ChangeEmailViewSet(ViewSet):
@@ -12,9 +13,11 @@ class ChangeEmailViewSet(ViewSet):
 
     @action(methods=['post'], detail=False)
     def update_email(self, request, *args, **kwargs):
-
-        serializer = ChangeEmailSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid(raise_exception=True):
+        serializer = ChangeEmailSerializer(
+            data=request.data,
+            context={'request': request})
+        if serializer.is_valid(
+                raise_exception=True):
             user = request.user
             user.email = serializer.validated_data['new_email']
             user.is_active = False
