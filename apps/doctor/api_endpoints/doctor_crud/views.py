@@ -1,3 +1,4 @@
+from rest_framework import serializers
 from rest_framework.generics import (
     CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView)
 
@@ -11,7 +12,14 @@ get_queryset = Doctors.objects.all()
 
 class DoctorCreateAPIView(CreateAPIView):
     serializer_class = DoctorCreateSerializer
-    queryset = get_queryset
+    queryset = Doctors.objects.all()
+
+    def perform_create(self, serializer):
+        # Foydalanuvchi faqat serializerga uzatiladi
+        serializer.save(user=self.request.user)
+
+
+
 
 
 class DoctorUpdateAPIView(UpdateAPIView):
