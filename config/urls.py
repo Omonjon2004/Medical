@@ -17,8 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# Swagger URL-larini qo'shish
 from config.swagger import swagger_urlpatterns
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,9 +28,9 @@ urlpatterns = [
     path('api/doctor/', include('apps.doctor.urls.v1')),
     path('api/patient/', include('apps.patient.urls.v1')),
     path('api/medication/', include('apps.medication.urls.v1')),
-
+    path('api/chat/', include('apps.chat.urls.v1')),
 ]
 
-urlpatterns+=swagger_urlpatterns
+urlpatterns += swagger_urlpatterns
 
 
