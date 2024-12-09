@@ -1,8 +1,5 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from datetime import time, timedelta
-
-from django.utils import timezone
 
 from apps.account_.models import Users
 
