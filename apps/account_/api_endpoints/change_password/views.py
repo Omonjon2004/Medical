@@ -6,7 +6,7 @@ from rest_framework.viewsets import ViewSet
 
 from apps.account_.api_endpoints \
     .change_password.serializers import (
-    ChangePasswordSerializer            )
+    ChangePasswordSerializer)
 
 
 class ChangePasswordViewSet(ViewSet):

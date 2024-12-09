@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from apps.doctor.models import Doctors
 
+
 class DoctorFilterSerializer(serializers.ModelSerializer):
-    full_name = serializers.CharField(source='user_id.full_name', read_only=True)
+    full_name = serializers.CharField(
+        source='user_id.full_name',
+        read_only=True)
 
     class Meta:
         model = Doctors

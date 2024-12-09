@@ -1,30 +1,30 @@
 from django.db import models
-
 from apps.account_.models import Users
 from apps.medication.models import Medications
 from apps.shared.models import TimeStampedModel
 
 
-# Create your models here.
+class Basket(TimeStampedModel):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Basket of {self.user.username}"
 
 
-class Orders(TimeStampedModel):
-    user_id = models.ForeignKey(Users,
-                                on_delete=models.CASCADE)
-    total_amount = models.FloatField()
-    STATUS_CHOICES = (
-        ('PENDING', 'Pending'),
-        ('SHIPPED', 'SHipped'),
-        ('DELIVERED', 'Delivered'),
-        ('CANCELLED', 'Cancelled')
-    )
+class BasketItem(models.Model):
+    basket = models.ForeignKey(Basket,
+                               related_name='items',
+                               on_delete=models.CASCADE)
+    medication = models.ForeignKey(Medications,
+                                   on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.quantity} x {self.medication.name}"
 
-class OrderItems(TimeStampedModel):
-    order_id = models.ForeignKey(Orders,
-                                 on_delete=models.CASCADE)
-    medication_id = models.ForeignKey(Medications,
-                                      on_delete=models.CASCADE)
-    quantity = models.FloatField()
-    price_per_unit = models.FloatField()
-    subtotal = models.FloatField()
+    @property
+    def total_price(self):
+        return self.medication.price * self.quantity
