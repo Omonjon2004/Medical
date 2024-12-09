@@ -24,9 +24,10 @@ class Doctors(models.Model):
         return f"{self.user.full_name}"
 
 
-
 class AppointmentSlot(models.Model):
-    doctor = models.ForeignKey('Doctors', on_delete=models.CASCADE, related_name='appointment_slots')
+    doctor = models.ForeignKey('Doctors',
+                               on_delete=models.CASCADE,
+                               related_name='appointment_slots')
     date = models.DateField()
     time = models.TimeField()
     is_available = models.BooleanField(default=True)
@@ -57,4 +58,6 @@ class Appointment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Appointment with Dr. {self.doctor.user.last_name} at {self.slot.time} on {self.slot.date}"
+        return (f"Appointment with Dr. "
+                f"{self.doctor.user.last_name} at "
+                f"{self.slot.time} on {self.slot.date}")

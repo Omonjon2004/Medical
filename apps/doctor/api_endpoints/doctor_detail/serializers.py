@@ -2,10 +2,12 @@ from rest_framework import serializers
 from apps.doctor.models import AppointmentSlot, Doctors
 from datetime import date
 
+
 class AppointmentSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppointmentSlot
         fields = ('time', 'is_available')
+
 
 class DoctorDetailSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
@@ -26,11 +28,13 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
         return f"{obj.user.full_name}"
 
     def get_available_slots(self, obj):
-        date_str = self.context.get('date')  # Get the date parameter from the request context
+        date_str = self.context.get('date')
         if date_str:
             try:
                 selected_date = date.fromisoformat(date_str)
-                slots = AppointmentSlot.objects.filter(doctor=obj, date=selected_date)
+                slots = AppointmentSlot.objects.filter(
+                    doctor=obj,
+                    date=selected_date)
 
                 if slots.exists():
                     return AppointmentSlotSerializer(slots, many=True).data
