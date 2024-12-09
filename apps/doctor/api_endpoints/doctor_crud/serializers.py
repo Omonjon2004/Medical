@@ -6,7 +6,6 @@ class DoctorCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctors
         fields = (
-            'user_id',
             'specialization',
             'experience_years',
             'ratings',
@@ -17,14 +16,22 @@ class DoctorCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
+            'user': {'read_only': True},
         }
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['user'] = user
+
+        doctor = Doctors.objects.create(**validated_data)
+        return doctor
 
 
 class DoctorUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctors
         fields = (
-            'user_id',
+            'user',
             'specialization',
             'experience_years',
             'ratings',
@@ -35,7 +42,7 @@ class DoctorUpdateSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
-            'user_id': {'read_only': True},
+            'user': {'read_only': True},
             'ratings': {'read_only': True},
         }
 
@@ -55,7 +62,7 @@ class DoctorListSerializer(serializers.ModelSerializer):
         )
 
     def get_full_name(self, obj):
-        return obj.user_id.full_name
+        return obj.user.full_name
 
 
 class DoctorDetailSerializer(serializers.ModelSerializer):
