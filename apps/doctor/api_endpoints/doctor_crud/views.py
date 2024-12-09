@@ -28,8 +28,3 @@ class DoctorListAPIView(ListAPIView):
 class DoctorDestroyAPIView(DestroyAPIView):
     serializer_class = DoctorDetailSerializer
     queryset = get_queryset
-
-
-class DoctorDetailAPIView(generics.RetrieveAPIView):
-    serializer_class = DoctorDetailSerializer
-    queryset = get_queryset

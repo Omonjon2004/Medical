@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from apps.account_.models import Users
-from apps.doctor.models import Doctors
+from apps.doctor.models import Doctors, AppointmentSlot
 
 
 class DoctorTabularInline(admin.TabularInline):
