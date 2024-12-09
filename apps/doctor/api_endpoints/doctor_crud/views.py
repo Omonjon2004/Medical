@@ -1,4 +1,3 @@
-from rest_framework import generics
 from rest_framework.generics import (
     CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView)
 

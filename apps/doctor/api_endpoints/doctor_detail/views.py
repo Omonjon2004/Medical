@@ -1,7 +1,9 @@
 from rest_framework.generics import RetrieveAPIView
 from apps.doctor.models import Doctors
-from apps.doctor.api_endpoints.doctor_detail.serializers import DoctorDetailSerializer
+from apps.doctor.api_endpoints \
+    .doctor_detail.serializers import DoctorDetailSerializer
 from rest_framework.permissions import IsAuthenticated
+
 
 class DoctorDetailView(RetrieveAPIView):
     queryset = Doctors.objects.all()

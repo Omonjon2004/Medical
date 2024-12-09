@@ -30,9 +30,13 @@ from rest_framework.views import APIView
 
 class GoogleCallbackView(APIView):
     permission_classes = (AllowAny,)
+
     @swagger_auto_schema(
         operation_summary="Google Login Callback",
-        operation_description="This endpoint is the callback for Google OAuth login. It's automatically handled by Django Allauth.",
+        operation_description="This endpoint "
+                              "is the callback for Google "
+                              "OAuth login. It's automatically "
+                              "handled by Django Allauth.",
         responses={200: "Login successful, user redirected."},
     )
     def get(self, request):
