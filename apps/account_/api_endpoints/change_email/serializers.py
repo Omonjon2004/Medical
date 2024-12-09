@@ -26,11 +26,12 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
     def validate_new_email(self, value):
 
         if Users.objects.filter(email=value).exists():
-            raise serializers.ValidationError("The new email is already in use.")
+            raise serializers.ValidationError(
+                detail="The new email is already in use.")
         return value
 
     def validate(self, attrs):
         if attrs['old_email'] == attrs['new_email']:
-            raise serializers.ValidationError("The old and new email cannot be the same.")
+            raise serializers.ValidationError(
+                detail="The old and new email cannot be the same.")
         return attrs
-

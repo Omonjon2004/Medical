@@ -5,7 +5,6 @@ from apps.account_.api_endpoints import auth
 from apps.account_.api_endpoints.auth.logout import LogoutView
 from apps.account_.api_endpoints.social_auth import GoogleCallbackView
 
-# from apps.account_.api_endpoints.social_auth import FacebookLogin, GoogleLogin, AppleLogin
 
 urlpatterns = [
     path('login/', auth.LoginView.as_view(), name='login'),

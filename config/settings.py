@@ -52,7 +52,6 @@ CUSTOM_APPS = [
     'apps.medication',
     'apps.patient',
     'apps.shared',
-    'apps.chat'
 
 ]
 THIRD_PARTY_APPS = [
@@ -70,6 +69,8 @@ THIRD_PARTY_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
+
+
 SITE_ID = 1
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -86,9 +87,6 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
-
-
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -102,8 +100,6 @@ ACCOUNT_USERNAME_REQUIRED = False  # Username talab qilinmaydi
 ACCOUNT_EMAIL_REQUIRED = True  # Faqat email ishlatiladi
 ACCOUNT_AUTHENTICATION_METHOD = 'email'  # Autentifikatsiya uchun email
 
-
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -114,7 +110,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
 ]
-
 
 ROOT_URLCONF = 'config.urls'
 
@@ -221,5 +216,3 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
