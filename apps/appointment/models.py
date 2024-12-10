@@ -1,35 +1,46 @@
-from django.utils import timezone
 from django.db import models
 
-from apps.doctor.models import Doctors
-from apps.patient.models import Patients
-from apps.shared.models import TimeStampedModel
+from apps.account_.models import Users
+from apps.doctor.models import Doctors, AppointmentSlot
 
 
-# Create your models here.
-
-class Appointments(TimeStampedModel):
-    patient_id = models.ForeignKey(Patients, on_delete=models.CASCADE)
-    doctor_id = models.ForeignKey(Doctors, on_delete=models.CASCADE)
-    appointment_date = models.DateField()
-    STATUS_CHOICES = (
-        ('PENDING', 'Pending'),
-        ('CONFIRMED', 'Confirmed'),
-        ('COMPLETED', 'Completed'),
-        ('CANCELED', 'Canceled')
+class Appointments(models.Model):
+    STATUS_CHOICES = [
+        ('Upcoming', 'Upcoming'),
+        ('Completed', 'Completed'),
+        ('Canceled', 'Canceled'),
+    ]
+    doctor = models.ForeignKey(
+        Doctors,
+        on_delete=models.CASCADE,
+        related_name="doctor_appointments"
     )
-    status = models.CharField(max_length=10,
-                              choices=STATUS_CHOICES, default='PENDING')
-    notes = models.TextField()
-
-
-class Payments(TimeStampedModel):
-    patient_id = models.ForeignKey(Patients, on_delete=models.CASCADE)
-    appointment_id = models.ForeignKey(Appointments, on_delete=models.CASCADE)
-    amount = models.FloatField()
-    payment_date = timezone.now()
-    STATUS_CHOICES = (
-        ('PAID', 'Paid'),
-        ('PENDING', 'Pending'),
-        ('FAILED', 'Failed'),
+    slot = models.OneToOneField(
+        AppointmentSlot,
+        on_delete=models.CASCADE,
+        related_name="slot_appointment"
     )
+    patient = models.ForeignKey(
+        Users,
+        on_delete=models.CASCADE,
+        related_name='patient_appointments'
+    )
+
+    status = models.CharField(max_length=20,
+                              choices=STATUS_CHOICES,
+                              default='Upcoming'
+                              )
+    confirmed = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['doctor', 'slot'],
+                name='unique_doctor_slot'
+            )
+        ]
+
+
+    def __str__(self):
+        return (f"Appointment with Dr. {self.doctor.user.full_name} on {self.slot.date} at {self.slot.time}")

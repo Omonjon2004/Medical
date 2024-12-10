@@ -37,27 +37,3 @@ class AppointmentSlot(models.Model):
 
     def __str__(self):
         return f'{self.date} {self.time} - {self.is_available}'
-
-
-class Appointment(models.Model):
-    patient = models.ForeignKey(
-        Users,
-        on_delete=models.CASCADE,
-        related_name="patient_appointments"
-    )
-    doctor = models.ForeignKey(
-        Doctors,
-        on_delete=models.CASCADE,
-        related_name="doctor_appointments"
-    )
-    slot = models.OneToOneField(
-        AppointmentSlot,
-        on_delete=models.CASCADE,
-        related_name="slot_appointment"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return (f"Appointment with Dr. "
-                f"{self.doctor.user.last_name} at "
-                f"{self.slot.time} on {self.slot.date}")

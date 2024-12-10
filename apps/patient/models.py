@@ -4,9 +4,6 @@ from apps.account_.models import Users
 from apps.shared.models import TimeStampedModel
 
 
-# Create your models here.
-
-
 class Patients(TimeStampedModel):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     age = models.IntegerField()
