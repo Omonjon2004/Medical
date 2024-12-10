@@ -1,4 +1,3 @@
-from rest_framework import serializers
 from rest_framework.generics import (
     CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView)
 
@@ -17,9 +16,6 @@ class DoctorCreateAPIView(CreateAPIView):
     def perform_create(self, serializer):
         # Foydalanuvchi faqat serializerga uzatiladi
         serializer.save(user=self.request.user)
-
-
-
 
 
 class DoctorUpdateAPIView(UpdateAPIView):

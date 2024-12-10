@@ -11,7 +11,8 @@ class DoctorDetailView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return super().get_queryset().select_related('user').prefetch_related('appointment_slots')
+        return (super().get_queryset().select_related('user').
+                prefetch_related('appointment_slots'))
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
