@@ -18,7 +18,6 @@ class DoctorCreateSerializer(serializers.ModelSerializer):
             'updated_at': {'read_only': True},
             'user': {'read_only': True},
         }
-
     def create(self, validated_data):
         user = self.context['request'].user
         validated_data['user'] = user
@@ -84,4 +83,4 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
         }
 
     def get_full_name(self, obj):
-        return obj.user_id.full_name
+        return obj.user.full_name

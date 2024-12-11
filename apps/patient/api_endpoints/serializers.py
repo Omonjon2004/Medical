@@ -8,7 +8,6 @@ class PatientCreateSerializer(serializers.ModelSerializer):
         model = Patients
         fields = (
             'id',
-            'user_id',
             'age',
             'gender',
             'medical_history',
@@ -23,7 +22,7 @@ class PatientCreateSerializer(serializers.ModelSerializer):
         }
 
         def get_full_name(self, obj):
-            return obj.user_id.full_name
+            return obj.user.full_name
 
 
 class PatientUpdateSerializer(serializers.ModelSerializer):
@@ -67,7 +66,7 @@ class PatientDetailSerializer(serializers.ModelSerializer):
         }
 
     def get_full_name(self, obj):
-        return obj.user_id.full_name
+        return obj.user.full_name
 
 
 class PatientListSerializer(serializers.ModelSerializer):
@@ -87,4 +86,4 @@ class PatientListSerializer(serializers.ModelSerializer):
         )
 
     def get_full_name(self, obj):
-        return obj.user_id.full_name
+        return obj.user.full_name
