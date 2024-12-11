@@ -5,7 +5,7 @@ from apps.shared.models import TimeStampedModel
 
 
 class Patients(TimeStampedModel):
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
     age = models.IntegerField()
     GENDER_CHOICES = [
         ('FEMALE', 'Female'),
