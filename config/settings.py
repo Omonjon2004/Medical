@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import datetime
 from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
@@ -69,7 +70,24 @@ THIRD_PARTY_APPS = [
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379/0',  # Bu yerda '1' bazasi ishlatilmoqda
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.getenv("SENDER_EMAIL")
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 SITE_ID = 1
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -79,9 +97,8 @@ SOCIALACCOUNT_PROVIDERS = {
         'CLIENT_ID': os.getenv('GOOGLE_CLIENT_ID'),
         'SECRET': os.getenv('GOOGLE_CLIENT_SECRET'),
         'REDIRECT_URIS': [
-            'http://127.0.0.1:8000/accounts/google/login/callback/',  # Local development
-            # Add your production domain as needed:
-            # 'https://your-production-domain.com/accounts/google/login/callback/',
+            'http://127.0.0.1:8000/accounts/google/login/callback/',
+
         ],
     }
 }
@@ -94,10 +111,10 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # username maydonini o'chirib qo'yish
-ACCOUNT_USERNAME_REQUIRED = False  # Username talab qilinmaydi
-ACCOUNT_EMAIL_REQUIRED = True  # Faqat email ishlatiladi
-ACCOUNT_AUTHENTICATION_METHOD = 'email'  # Autentifikatsiya uchun email
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'  #
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -130,13 +147,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.getenv("SENDER_EMAIL")
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -154,12 +166,7 @@ DATABASES = {
 }
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
-    }
-}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -176,22 +183,28 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SIMPLE_JWT = {
+    "TOKEN_OBTAIN_SERIALIZER":"account.api_endpoints.Login.serializers.LoginSerializer",
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=3),
+    "REFRESH_TOKEN_LIFETIME": timedelta(weeks=1),
+}
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
-    'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
-    'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        }
+    }
 }
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
