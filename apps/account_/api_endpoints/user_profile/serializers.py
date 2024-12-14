@@ -38,3 +38,25 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def get_role(self, obj):
         return obj.user.role
+
+
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserProfile
+        fields = (
+            'id',
+            'full_name',
+            'phone_number',
+            'avatar',
+        )
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'phone_number': {'required': False},
+            'avatar': {'required': False},
+        }
+
+    def get_full_name(self, obj):
+        return obj.user.full_name
+

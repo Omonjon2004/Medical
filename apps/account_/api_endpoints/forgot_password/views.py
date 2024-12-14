@@ -18,6 +18,7 @@ from django.shortcuts import get_object_or_404
 
 class ForgotPasswordAPIView(APIView):
     permission_classes = [AllowAny]
+    serializer_class = ForgotPasswordSerializers
 
     @swagger_auto_schema(request_body=ForgotPasswordSerializers)
     def post(self, request):
