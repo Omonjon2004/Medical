@@ -1,10 +1,6 @@
 import os
-import random
-
 from celery import shared_task
 from django.core.mail import send_mail
-from django.core.cache import cache
-from config.celery import app
 
 
 @shared_task
@@ -18,7 +14,6 @@ def send_email(email, confirmation_code):
     )
 
     return "Done"
-
 
 
 @shared_task(bind=True, ignore_result=True)

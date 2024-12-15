@@ -28,13 +28,13 @@ class Users(AbstractUser, TimeStampedModel):
 
 
 class UserProfile(TimeStampedModel):
-    user = models.OneToOneField(Users, on_delete=models.CASCADE)
+    user = models.OneToOneField(Users,
+                                on_delete=models.CASCADE)
     phone_number = models.CharField(
-        max_length=13, unique=True, null=True, blank=True)
-    avatar = models.ImageField(upload_to='avatars/',blank=True,null=True)
-
-
-
-
-
-
+        max_length=13,
+        unique=True,
+        null=True,
+        blank=True)
+    avatar = models.ImageField(upload_to='avatars/',
+                               blank=True,
+                               null=True)

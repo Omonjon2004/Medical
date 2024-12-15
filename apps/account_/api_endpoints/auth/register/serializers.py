@@ -18,7 +18,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         }
 
 
-
 class ConfirmCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
     confirm_code = serializers.IntegerField()

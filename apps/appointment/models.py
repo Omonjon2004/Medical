@@ -41,6 +41,8 @@ class Appointments(models.Model):
             )
         ]
 
-
     def __str__(self):
-        return (f"Appointment with Dr. {self.doctor.user.full_name} on {self.slot.date} at {self.slot.time}")
+        return (f"Appointment with Dr. "
+                f"{self.doctor.user.full_name}"
+                f" on {self.slot.date} at "
+                f"{self.slot.time}")

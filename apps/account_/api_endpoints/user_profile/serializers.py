@@ -40,10 +40,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return obj.user.role
 
 
-
 class UserProfileUpdateSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source='user.full_name', required=False)
     phone_number = serializers.CharField(max_length=13, required=False)
+
     class Meta:
         model = UserProfile
         fields = ['phone_number', 'full_name', 'avatar']
@@ -51,14 +51,3 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
 
             'avatar': {'read_only': False},
         }
-
-
-
-
-
-
-
-
-
-
-

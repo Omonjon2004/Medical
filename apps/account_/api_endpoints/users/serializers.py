@@ -29,14 +29,11 @@ class UserSerializer(serializers.ModelSerializer):
         profile_data = validated_data.pop('userprofile', {})
         password = validated_data.pop('password', None)
 
-
         user = Users(**validated_data)
-
 
         if password:
             user.set_password(password)
         user.save()
-
 
         user_profile, created = UserProfile.objects.get_or_create(
             user=user,
@@ -53,18 +50,16 @@ class UserSerializer(serializers.ModelSerializer):
         phone_number = profile_data.get('phone_number')
         avatar = profile_data.get('avatar')
 
-
         password = validated_data.pop('password', None)
         if password:
             instance.set_password(password)
-
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
-
-        user_profile, created = UserProfile.objects.get_or_create(user=instance)
+        user_profile, created = \
+            UserProfile.objects.get_or_create(user=instance)
 
         if phone_number is not None:
             user_profile.phone_number = phone_number

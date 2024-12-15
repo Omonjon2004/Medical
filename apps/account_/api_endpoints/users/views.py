@@ -16,8 +16,8 @@ class UsersModelViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         role = self.request.query_params.get('role')
-        full_name=self.request.query_params.get('full_name')
-        email=self.request.query_params.get('email')
+        full_name = self.request.query_params.get('full_name')
+        email = self.request.query_params.get('email')
 
         if role:
             queryset = (
@@ -27,13 +27,19 @@ class UsersModelViewSet(ModelViewSet):
             )
         if full_name:
             queryset = (
-                queryset.annotate(sim=TrigramSimilarity('full_name', full_name))
+                queryset.annotate(
+                    sim=TrigramSimilarity(
+                        'full_name',
+                        full_name))
                 .filter(sim__gte=0.2)
                 .order_by('-sim')
             )
         if email:
             queryset = (
-                queryset.annotate(sim=TrigramSimilarity('email', email))
+                queryset.annotate(
+                    sim=TrigramSimilarity(
+                        'email',
+                        email))
                 .filter(sim__gte=0.2)
                 .order_by('-sim')
             )

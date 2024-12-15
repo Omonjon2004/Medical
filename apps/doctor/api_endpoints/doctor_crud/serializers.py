@@ -18,6 +18,7 @@ class DoctorCreateSerializer(serializers.ModelSerializer):
             'updated_at': {'read_only': True},
             'user': {'read_only': True},
         }
+
     def create(self, validated_data):
         user = self.context['request'].user
         validated_data['user'] = user

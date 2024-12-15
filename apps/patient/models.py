@@ -18,5 +18,3 @@ class Patients(TimeStampedModel):
 
     def __str__(self):
         return f"{self.user.full_name}"
-    "user__full_name"
-
