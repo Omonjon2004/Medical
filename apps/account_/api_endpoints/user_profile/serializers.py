@@ -40,23 +40,25 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return obj.user.role
 
 
-class UserProfileUpdateSerializer(serializers.ModelSerializer):
-    full_name = serializers.SerializerMethodField()
 
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source='user.full_name', required=False)
+    phone_number = serializers.CharField(max_length=13, required=False)
     class Meta:
         model = UserProfile
-        fields = (
-            'id',
-            'full_name',
-            'phone_number',
-            'avatar',
-        )
+        fields = ['phone_number', 'full_name', 'avatar']
         extra_kwargs = {
-            'id': {'read_only': True},
-            'phone_number': {'required': False},
-            'avatar': {'required': False},
+
+            'avatar': {'read_only': False},
         }
 
-    def get_full_name(self, obj):
-        return obj.user.full_name
+
+
+
+
+
+
+
+
+
 

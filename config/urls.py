@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/', include('apps.account_.urls.v1')),
     path('api/google/login/', include('apps.account_.urls.v4')),
     path('api/userprofile/', include('apps.account_.urls.v2')),
+    path('api/users/', include('apps.account_.urls.v3')),
     path('api/doctor/', include('apps.doctor.urls.v1')),
     path('api/patient/', include('apps.patient.urls.v1')),
     path('api/medication/', include('apps.medication.urls.v1')),

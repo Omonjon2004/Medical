@@ -32,7 +32,7 @@ class UserProfile(TimeStampedModel):
     user = models.OneToOneField(Users, on_delete=models.CASCADE)
     phone_number = models.CharField(
         max_length=13, unique=True, null=True, blank=True)
-    avatar = models.ImageField(upload_to='avatars/')
+    avatar = models.ImageField(upload_to='avatars/',blank=True,null=True)
 
 
 class UserCards(TimeStampedModel):

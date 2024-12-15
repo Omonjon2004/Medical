@@ -14,11 +14,7 @@ class ChangeEmailCreateAPIView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ChangeEmailSerializer
 
-
-    @swagger_auto_schema(
-        request_body=ChangeEmailSerializer,
-    )
-    def update_email(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = ChangeEmailSerializer(
             data=request.data,
             context={'request': request})

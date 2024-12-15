@@ -1,60 +1,58 @@
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-
-from rest_framework.generics import  ListAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+
 from apps.account_.api_endpoints.user_profile.serializers import (
     UserProfileSerializer, UserProfileUpdateSerializer, )
 from apps.account_.models import Users, UserProfile
 
 
-class ProfileListAPIView(ListAPIView):
-    queryset = Users.objects.all().order_by('id')
-    serializer_class = UserProfileSerializer
+class ProfileListAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = UserProfileSerializer
 
-    @swagger_auto_schema(
-        request_body=UserProfileUpdateSerializer,
-    )
-    def user_profile(self, *args, **kwargs):
-        user_profile = get_object_or_404(UserProfile, user=self.request.user)
-        serializer = UserProfileSerializer(user_profile)
+    def get_object(self):
+        return get_object_or_404(UserProfile, user=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        user_profile = self.get_object()
+        serializer = self.get_serializer(user_profile)
         return Response(serializer.data)
 
 
-class UserProfileUpdateAPIView(UpdateAPIView):
+class UserProfileUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserProfileUpdateSerializer
 
+    def get_object(self):
+        return self.request.user
+
     @swagger_auto_schema(
         request_body=UserProfileUpdateSerializer,
-        responses={200: UserProfileUpdateSerializer}
     )
-    def put(self, request):
-        user_profile = get_object_or_404(UserProfile, user=self.request.user)
+    def put(self, request, *args, **kwargs):
+        user_profile = self.get_object()
         serializer = self.serializer_class(user_profile, data=request.data)
 
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
-        request_body=UserProfileUpdateSerializer,
-        responses={200: UserProfileUpdateSerializer}
+     request_body=UserProfileUpdateSerializer,
     )
-    def patch(self, request):
-        user_profile = get_object_or_404(UserProfile, user=self.request.user)
+    def patch(self, request, *args, **kwargs):
+        user_profile = self.get_object()
         serializer = self.serializer_class(user_profile, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-

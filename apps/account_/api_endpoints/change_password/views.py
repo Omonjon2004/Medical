@@ -1,43 +1,26 @@
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
+from rest_framework import serializers
 
-from apps.account_.api_endpoints \
-    .change_password.serializers import (ChangePasswordSerializer)
+from apps.account_.api_endpoints.change_password.serializers import ChangePasswordSerializer
 
 
 class ChangePasswordCreateAPIView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ChangePasswordSerializer
 
-    @swagger_auto_schema(
+    def perform_create(self, serializer):
+        user = self.request.user
+        old_password = serializer.validated_data['old_password']
 
-        request_body=ChangePasswordSerializer,
-    )
-    def change_password(self, request, *args, **kwargs):
-        serializer = ChangePasswordSerializer(
-            data=request.data,
-            context={'request': request}
-        )
 
-        if serializer.is_valid(raise_exception=True):
-            user = request.user
-            user.set_password(
-                serializer.validated_data['new_password']
-            )
+        if not user.check_password(old_password):
+            raise serializers.ValidationError({"old_password": "Old password is incorrect."})
+
+
+        else:
+            user.set_password(serializer.validated_data['new_password'])
             user.save()
-            return Response(
-                data={"detail": "your password has been successfully changed"},
-                status=status.HTTP_200_OK
-            )
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+            raise serializers.ValidationError({"new_password": "Successfully changed password."})
 
 
-__all__ = ['ChangePasswordCreateAPIView']
