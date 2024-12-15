@@ -13,9 +13,10 @@ class Patients(TimeStampedModel):
         ('MALE', 'Male'),
     ]
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
-    medical_history = models.TextField()  # Uzunroq matn uchun
+    medical_history = models.TextField()
     additional_phone_number = models.CharField(max_length=13)
 
     def __str__(self):
         return f"{self.user.full_name}"
+    "user__full_name"
 

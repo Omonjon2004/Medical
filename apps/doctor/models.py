@@ -26,23 +26,6 @@ class Doctors(models.Model):
     def __str__(self):
         return f"{self.user.full_name}"
 
-class DoctorRating(models.Model):
-    patient = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="patient_ratings")
-    doctor = models.ForeignKey(Doctors, on_delete=models.CASCADE, related_name="doctor_ratings")
-    rating = models.FloatField(validators=[
-        MinValueValidator(1.0),
-        MaxValueValidator(5.0)
-    ])
-    # liked = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('patient', 'doctor')
-
-    def __str__(self):
-        return f"{self.patient.full_name} -> {self.doctor.user.full_name} ({self.rating})"
-
-
 
 class AppointmentSlot(models.Model):
     doctor = models.ForeignKey('Doctors',
