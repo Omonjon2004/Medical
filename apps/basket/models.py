@@ -28,3 +28,4 @@ class BasketItem(models.Model):
     @property
     def total_price(self):
         return self.medication.price * self.quantity
+

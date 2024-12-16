@@ -7,17 +7,16 @@ from apps.medication.models import Medications
 
 class AddToBasketView(APIView):
     def post(self, request):
-        user = request.user  # Tizimga kirgan foydalanuvchi
+        user = request.user
         medication_id = request.data.get('medication_id')
         quantity = request.data.get('quantity', 1)
 
-        # Foydalanuvchi mavjudligini tekshirish
+
         if not user.is_authenticated:
             return Response(
                 data={"error": "User must be logged in"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        # Dori mavjudligini tekshirish
         try:
             medication = Medications.objects.get(id=medication_id)
         except Medications.DoesNotExist:
@@ -25,30 +24,28 @@ class AddToBasketView(APIView):
                 data={"error": "Medication not found"},
                 status=status.HTTP_404_NOT_FOUND)
 
-        # Dorining stock_quantity miqdorini tekshirish
+
         if medication.stock_quantity < quantity:
             return Response(
                 data={"error": "Not enough stock available"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        # Foydalanuvchining savatini olish yoki yaratish
+
         basket, created = Basket.objects.get_or_create(user=user)
 
-        # Savatga mahsulot qo'shish yoki mavjud bo'lsa, miqdorini yangilash
+
         basket_item, created = BasketItem.objects.get_or_create(
             basket=basket,
             medication=medication)
 
         if not created:
-            # Agar mahsulot mavjud bo'lsa, miqdorni yangilash
             basket_item.quantity += quantity
             basket_item.save()
 
-        # Dorining stock_quantity ni kamaytirish
         medication.stock_quantity -= quantity
         medication.save()
 
-        # Jami narxni hisoblash
+
         total_price = basket_item.total_price
 
         return Response({
@@ -61,13 +58,13 @@ class AddToBasketView(APIView):
 
 class ViewBasketView(APIView):
     def get(self, request):
-        user = request.user  # Tizimga kirgan foydalanuvchi
+        user = request.user
         if not user.is_authenticated:
             return Response(
                 data={"error": "User must be logged in"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        # Foydalanuvchining savatini olish
+
         try:
             basket = Basket.objects.get(user=user)
         except Basket.DoesNotExist:
