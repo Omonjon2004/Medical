@@ -47,23 +47,15 @@ class DoctorUpdateSerializer(serializers.ModelSerializer):
         }
 
 
+
 class DoctorListSerializer(serializers.ModelSerializer):
-    full_name = serializers.SerializerMethodField()
+    full_name = serializers.CharField(
+        source='user_id.full_name',
+        read_only=True)
 
     class Meta:
         model = Doctors
-        fields = (
-            'id',
-            'full_name',
-            'specialization',
-            'experience_years',
-            'ratings',
-            'bio'
-        )
-
-    def get_full_name(self, obj):
-        return obj.user.full_name
-
+        fields = ['id', 'full_name', 'specialization', 'ratings']
 
 class DoctorDetailSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()

@@ -1,5 +1,7 @@
+from rest_framework import viewsets
 from rest_framework.generics import (
     CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView)
+from rest_framework.permissions import IsAuthenticated
 
 from apps.doctor.api_endpoints.doctor_crud.serializers import (
     DoctorCreateSerializer, DoctorUpdateSerializer,
@@ -25,10 +27,13 @@ class DoctorUpdateAPIView(UpdateAPIView):
     permission_classes = [IsDoctorReadOnly]
 
 
-class DoctorListAPIView(ListAPIView):
-    queryset = get_queryset
+
+class DoctorListAPIView(viewsets.ReadOnlyModelViewSet):
     serializer_class = DoctorListSerializer
-    permission_classes = [IsDoctorReadOnly]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Doctors.objects.all().order_by('-ratings')
 
 
 class DoctorDestroyAPIView(DestroyAPIView):

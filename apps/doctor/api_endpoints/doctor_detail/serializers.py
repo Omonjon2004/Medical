@@ -1,13 +1,12 @@
+from django.utils import timezone
 from rest_framework import serializers
 from apps.doctor.models import AppointmentSlot, Doctors
 from datetime import date
-
 
 class AppointmentSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppointmentSlot
         fields = ('time', 'is_available')
-
 
 class DoctorDetailSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
@@ -28,13 +27,22 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
         return f"{obj.user.full_name}"
 
     def get_available_slots(self, obj):
+        # Get the date from the context
         date_str = self.context.get('date')
         if date_str:
             try:
+                # Convert the string to a date object
                 selected_date = date.fromisoformat(date_str)
+
+                # Sana hozirgi kundan oldingi bo'lishi kerakligini tekshirish
+                if selected_date < timezone.localtime(timezone.now()).date():
+                    raise serializers.ValidationError("Sana hozirgi kunga yoki undan keyingi bo'lishi kerak.")
+
+                # Filter appointment slots by doctor and selected date
                 slots = AppointmentSlot.objects.filter(
                     doctor=obj,
-                    date=selected_date)
+                    date=selected_date
+                )
 
                 if slots.exists():
                     return AppointmentSlotSerializer(slots, many=True).data
