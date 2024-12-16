@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 
 from apps.basket.api_endpoints.serializers import \
-    BasketDetailSerializer, BasketCreateSerializer, BasketItemSerializer, BasketItemAdminSerializer
+    BasketDetailSerializer, BasketCreateSerializer, BasketItemAdminSerializer
 from apps.basket.models import Basket, BasketItem
 from apps.medication.models import Medications
 from config.permissions import IsAdminReadOnly
