@@ -6,9 +6,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 app = Celery('Medical')
 
-# Redisni Celery brokeri sifatida sozlash
-app.config_from_object('django.conf:settings', namespace='CELERY')
-
 # Celery tasklarini topish
 app.autodiscover_tasks()
 

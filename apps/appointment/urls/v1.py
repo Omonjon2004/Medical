@@ -3,10 +3,14 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from apps.appointment.api_endpoints import AppointmentViewSet
+from apps.appointment.api_endpoints import AppointmentCreateViewSet
+from apps.appointment.api_endpoints.appintment_update import AppointmentUpdateView
+from apps.appointment.api_endpoints.appointment_crud import AppointmentViewSet
 
 router = DefaultRouter()
-router.register(r'appointments', AppointmentViewSet)
+router.register(r'create', AppointmentCreateViewSet, basename='create')
+router.register(r'crud', AppointmentViewSet, basename='crud')
+router.register(r'update', AppointmentUpdateView, basename='update')
 
 urlpatterns = [
     path('', include(router.urls)),]
