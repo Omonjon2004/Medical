@@ -2,22 +2,45 @@ from rest_framework import serializers
 from apps.appointment.models import Appointments
 from apps.doctor.models import AppointmentSlot
 
-class AppointmentUpdateSerializer(serializers.ModelSerializer):
-    slot_id = serializers.PrimaryKeyRelatedField(queryset=AppointmentSlot.objects.all(), help_text="Slot ID sini kiriting")
 
-    class Meta:
-        model = Appointments
-        fields = ['id', 'slot_id']  # Appointment ID va Slot ID
+class AppointmentRescheduleSerializer(serializers.Serializer):
+    appointment_id = serializers.IntegerField(required=True, help_text="Tayinlash ID (Appointment ID) ni kiriting")
+    new_slot = serializers.PrimaryKeyRelatedField(
+        queryset=AppointmentSlot.objects.all(),
+        required=True,
+        help_text="Yangi slot ID ni kiriting"
+    )
 
     def validate(self, data):
-        slot = data.get('slot_id')
+        appointment_id = data.get('appointment_id')
+        new_slot = data.get('new_slot')
 
-        # Slot bo'sh ekanligini tekshirish
-        if slot is None:
-            raise serializers.ValidationError("Slot is required.")
+        try:
+            appointment = Appointments.objects.get(pk=appointment_id)
+        except Appointments.DoesNotExist:
+            raise serializers.ValidationError({"appointment_id": "Tayinlash topilmadi."})
 
-        # Slot va doktor band bo'lmaganligini tekshirish
-        if Appointments.objects.filter(slot=slot, date=data.get('date')).exists():
-            raise serializers.ValidationError(f"The selected slot is already taken by another appointment.")
+        if new_slot.doctor != appointment.doctor:
+            raise serializers.ValidationError(
+                {"new_slot": "Yangi slot tanlangan doktorga tegishli emas."}
+            )
+
+        if not new_slot.is_available:
+            raise serializers.ValidationError(
+                {"new_slot": "Yangi slot allaqachon band qilingan."}
+            )
 
         return data
+
+    def update(self, instance, validated_data):
+        old_slot = instance.slot
+        old_slot.is_available = True
+        old_slot.save()
+
+        new_slot = validated_data['new_slot']
+        new_slot.is_available = False
+        new_slot.save()
+
+        instance.slot = new_slot
+        instance.save()
+        return instance
