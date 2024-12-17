@@ -29,19 +29,19 @@ class AppointmentViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'], url_path='upcoming')
     def upcoming(self, request):
-        appointments = Appointments.objects.filter(patient=request.user, status='upcoming')
+        appointments = Appointments.objects.filter(patient=request.user, status='Upcoming')
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='completed')
     def completed(self, request):
-        appointments = Appointments.objects.filter(patient=request.user, status='completed')
+        appointments = Appointments.objects.filter(patient=request.user, status='Completed')
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='canceled')
     def canceled(self, request):
-        appointments = Appointments.objects.filter(patient=request.user, status='canceled')
+        appointments = Appointments.objects.filter(patient=request.user, status='Canceled')
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data)
 
@@ -49,7 +49,7 @@ class AppointmentViewSet(viewsets.ViewSet):
     def cancel(self, request, pk=None):
         try:
             appointment = Appointments.objects.get(pk=pk, patient=request.user)
-            appointment.status = 'canceled'
+            appointment.status = 'Canceled'
             appointment.save()
             return Response({"status": "Appointment canceled successfully."})
         except Appointments.DoesNotExist:

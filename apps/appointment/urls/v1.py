@@ -10,7 +10,8 @@ from apps.appointment.api_endpoints.appointment_crud import AppointmentViewSet
 router = DefaultRouter()
 router.register(r'create', AppointmentCreateViewSet, basename='create')
 router.register(r'crud', AppointmentViewSet, basename='crud')
-router.register(r'update', AppointmentUpdateView, basename='update')
+router.register(r'reschedule', AppointmentUpdateView, basename='reschedule')
 
 urlpatterns = [
-    path('', include(router.urls)),]
+    path('', include(router.urls)),
+]
