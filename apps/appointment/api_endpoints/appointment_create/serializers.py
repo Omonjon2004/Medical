@@ -1,3 +1,4 @@
+from django.db.models import IntegerField
 from rest_framework import serializers
 from apps.appointment.models import Appointments
 from apps.doctor.models import AppointmentSlot, Doctors
