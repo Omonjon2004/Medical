@@ -22,14 +22,7 @@ class BasketAdmin(admin.ModelAdmin):
 @admin.register(BasketItem)
 class BasketItemAdmin(admin.ModelAdmin):
     search_fields = (
-        "id",
-        "medication__name",
-        "quantity",
-        "added_at"
-    )
-    list_display = (
-        "id",
-        "medication",
-        "quantity",
-        "added_at"
+        'basket',
+        'medication',
+        'quantity'
     )

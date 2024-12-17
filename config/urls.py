@@ -30,9 +30,12 @@ urlpatterns = [
     path('api/patient/', include('apps.patient.urls.v1')),
     path('api/medication/', include('apps.medication.urls.v1')),
     path('api/basket/', include('apps.basket.urls.v1')),
+    path('api/admin/basket', include('apps.basket.urls.v2')),
+
     path('api/appointment/', include('apps.appointment.urls.v1')),
 ]
 
 urlpatterns += swagger_urlpatterns
+
 
 
