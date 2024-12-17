@@ -73,12 +73,15 @@ INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://localhost:6379/0',  # Bu yerda '1' bazasi ishlatilmoqda
+        'LOCATION': 'redis://localhost:6379/0',  # Redis-1 bazasi
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
 }
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
