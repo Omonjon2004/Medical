@@ -3,7 +3,7 @@ from django.db import models
 
 from apps.account_.manager import CustomUserManager
 from apps.shared.models import TimeStampedModel
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 class Users(AbstractUser, TimeStampedModel):
     username = None
@@ -28,13 +28,24 @@ class Users(AbstractUser, TimeStampedModel):
 
 
 class UserProfile(TimeStampedModel):
-    user = models.OneToOneField(Users,
-                                on_delete=models.CASCADE)
-    phone_number = models.CharField(
-        max_length=13,
+    user = models.OneToOneField(
+        Users,
+        on_delete=models.CASCADE,
+        related_name="profile"
+    )
+    phone_number = PhoneNumberField(
         unique=True,
         null=True,
-        blank=True)
-    avatar = models.ImageField(upload_to='avatars/',
-                               blank=True,
-                               null=True)
+        blank=True,
+        verbose_name="Phone Number",
+        region="UZ"  # Telefon raqamni O‘zbekiston bo‘yicha validatsiya qiladi
+    )
+    avatar = models.ImageField(
+        upload_to='avatars/',
+        blank=True,
+        null=True,
+        verbose_name="Avatar"
+    )
+
+    def __str__(self):
+        return f"{self.user.full_name}'s Profile"

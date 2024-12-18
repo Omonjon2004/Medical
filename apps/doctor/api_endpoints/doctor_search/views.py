@@ -4,7 +4,7 @@ from django.db.models.functions import Cast
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from apps.doctor \
     .api_endpoints.doctor_search.serializers import (
@@ -15,7 +15,7 @@ from apps.doctor.models import Doctors
 class DoctorSearchAPIView(ListAPIView):
     serializer_class = DoctorSearchSerializer
     queryset = Doctors.objects.all()
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         queryset = super().get_queryset()

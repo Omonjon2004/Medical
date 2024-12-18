@@ -1,3 +1,4 @@
+from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 from apps.account_.models import UserProfile
 
@@ -41,13 +42,37 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserProfileUpdateSerializer(serializers.ModelSerializer):
-    full_name = serializers.CharField(source='user.full_name', required=False)
-    phone_number = serializers.CharField(max_length=13, required=False)
+    full_name = serializers.CharField(
+        source='user.full_name',
+        required=False,
+        read_only=False
+    )
+    phone_number = PhoneNumberField(
+        required=False,
+        allow_null=True
+    )
+    avatar = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = UserProfile
         fields = ['phone_number', 'full_name', 'avatar']
         extra_kwargs = {
-
             'avatar': {'read_only': False},
         }
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', {})
+        full_name = user_data.get('full_name')
+        if full_name:
+            instance.user.full_name = full_name
+            instance.user.save()
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        return instance
+
+
+
+
+

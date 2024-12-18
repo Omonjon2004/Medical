@@ -24,12 +24,14 @@ class IsPatientReadOnly(permissions.BasePermission):
 
 
 class IsAdminReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.user.is_authenticated:
-            return True
-        return False
-
     def has_object_permission(self, request, view, obj):
-        if request.user.role == 'ADMIN' or request.is_superuser:
+        if not request.user.is_authenticated:
+            return False
+
+        if hasattr(request.user, 'role') and request.user.role == 'ADMIN':
             return True
+
+        if request.user.is_superuser:
+            return True
+
         return False

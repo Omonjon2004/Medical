@@ -1,7 +1,7 @@
 from django.contrib.postgres.search import TrigramSimilarity
 from rest_framework import status
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.response import Response
@@ -144,7 +144,7 @@ class MedicationListAPIView(ListAPIView):
 class MedicationCreateAPIView(APIView):
     serializer_class = MedicationSerializer
     queryset = Medications.objects.all()
-    permission_classes = (IsAdminReadOnly,)
+    permission_classes = (IsAdminUser,)
 
     @swagger_auto_schema(
         request_body=MedicationSerializer,

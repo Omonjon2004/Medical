@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.generics import (
     CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView)
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from apps.doctor.api_endpoints.doctor_crud.serializers import (
     DoctorCreateSerializer, DoctorUpdateSerializer,

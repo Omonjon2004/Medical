@@ -5,12 +5,12 @@ from apps.account_.api_endpoints.change_password import ChangePasswordCreateAPIV
 
 
 
-from apps.account_.api_endpoints.user_profile import ProfileListAPIView, UserProfileUpdateAPIView
+from apps.account_.api_endpoints.user_profile import ProfileListAPIView, UserProfileUpdateDeleteView
 
 
 urlpatterns = [
     path('user/profile-user/', ProfileListAPIView.as_view(), name='user-profile'),
     path('user/change-password/',ChangePasswordCreateAPIView.as_view(),name='change_password'),
     path('user/change-email/',ChangeEmailCreateAPIView.as_view(),name='change_email'),
-    path('user/update-user/', UserProfileUpdateAPIView.as_view(), name='update_user_profile'),
+    path('user/update-user/', UserProfileUpdateDeleteView.as_view(), name='update_user_profile'),
 ]
