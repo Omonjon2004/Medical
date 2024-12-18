@@ -10,8 +10,8 @@ class Users(AbstractUser, TimeStampedModel):
     full_name = models.CharField(max_length=255, )
     email = models.EmailField(unique=True)
     ROLE_CHOICES = (
-        ('ADMIN', 'Admin'),
         ('PATIENT', 'Patient'),
+        ('ADMIN', 'Admin'),
         ('DOCTOR', 'Doctor'),
     )
     role = models.CharField(max_length=10,
