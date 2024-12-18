@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.medication.models import Medications
-from apps.medication.api_endpoints.serializers import MedicationSerializer
+from apps.medication.api_endpoints.serializers import MedicationSerializer, MedicationRatingSerializer
 from config.permissions import IsAdminReadOnly
 
 
@@ -193,4 +193,19 @@ class MedicationCreateAPIView(APIView):
                     status=status.HTTP_201_CREATED,
                 )
 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MedicationRatingAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        request_body=MedicationRatingSerializer,
+    )
+
+    def post(self, request):
+        serializer = MedicationRatingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

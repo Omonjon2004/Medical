@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.medication.models import Medications
+from apps.medication.models import Medications, Medication_Rating
 
 
 class MedicationSerializer(serializers.ModelSerializer):
@@ -15,6 +15,8 @@ class MedicationSerializer(serializers.ModelSerializer):
             'price',
             'stock_quantity',
             'manufacturer',
+            'total_rating',
+            'rating_count',
             'created_at',
             'updated_at',
         )
@@ -22,4 +24,12 @@ class MedicationSerializer(serializers.ModelSerializer):
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
             'id': {'read_only': True},
+        }
+
+class MedicationRatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Medication_Rating
+        fields = ['user', 'medication', 'rating']
+        extra_kwargs = {
+            'user': {'read_only': True},
         }
