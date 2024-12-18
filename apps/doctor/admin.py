@@ -16,11 +16,10 @@ class DoctorsAdmin(admin.ModelAdmin):
         "specialization",
         'experience_years',
         'user__full_name',
-        'ratings'
     )
     list_display = ('id',
                     'user',
                     'specialization',
                     'experience_years',
-                    'ratings'
+
                     )

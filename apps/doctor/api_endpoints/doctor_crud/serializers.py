@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.doctor.models import Doctors
+from apps.doctor.models import Doctors, Doctor_Rating
 
 
 class DoctorCreateSerializer(serializers.ModelSerializer):
@@ -55,7 +55,7 @@ class DoctorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Doctors
-        fields = ['id', 'full_name', 'specialization', 'ratings']
+        fields = ['id', 'full_name', 'specialization', 'rating_count','total_rating']
 
 class DoctorDetailSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
@@ -77,3 +77,12 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, obj):
         return obj.user.full_name
+
+
+class DoctorRatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor_Rating
+        fields = ['user', 'doctor', 'rating']
+        extra_kwargs = {
+            'user': {'read_only': True},
+        }

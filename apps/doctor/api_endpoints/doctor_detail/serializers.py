@@ -18,7 +18,8 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
             'id',
             'full_name',
             'specialization',
-            'ratings',
+            'total_rating',
+            'rating_count',
             'bio',
             'available_slots'
         )

@@ -2,9 +2,10 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 from apps.account_.models import Users
+from apps.shared.models import TimeStampedModel
 
 
-class Doctors(models.Model):
+class Doctors(TimeStampedModel):
     user = models.OneToOneField(
         Users,
         on_delete=models.CASCADE,
@@ -12,19 +13,47 @@ class Doctors(models.Model):
     )
     specialization = models.CharField(max_length=100)
     experience_years = models.PositiveIntegerField()
-    ratings = models.FloatField(
-        validators=[
-            MinValueValidator(1.0),
-            MaxValueValidator(5.0)
-        ],
-        default=0.0
-    )
     bio = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+
+    total_rating = models.FloatField(default=0.0)
+    rating_count = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.user.full_name}"
+
+
+class Doctor_Rating(TimeStampedModel):
+    user = models.ForeignKey(
+        Users,
+        on_delete=models.CASCADE,
+        related_name="doctor_ratings"
+    )
+    doctor = models.ForeignKey(
+        Doctors,
+        on_delete=models.CASCADE,
+        related_name="ratings"
+    )
+    rating = models.PositiveIntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5)
+        ]
+    )
+
+    def save(self, *args, **kwargs):
+        doctor = self.doctor
+        if self.pk is None:
+            doctor.total_rating = (
+                doctor.total_rating * doctor.rating_count + self.rating
+            ) / (doctor.rating_count + 1)
+            doctor.rating_count += 1
+        else:
+            old_rating = Doctor_Rating.objects.get(pk=self.pk).rating
+            doctor.total_rating = (
+                doctor.total_rating * doctor.rating_count - old_rating + self.rating
+            ) / doctor.rating_count
+        doctor.save()
+        super().save(*args, **kwargs)
 
 
 class AppointmentSlot(models.Model):
@@ -40,3 +69,5 @@ class AppointmentSlot(models.Model):
 
     def __str__(self):
         return f'{self.date} {self.time} - {self.is_available}'
+
+
