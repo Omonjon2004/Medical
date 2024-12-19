@@ -92,3 +92,4 @@ class ConfirmCodeApiView(GenericAPIView):
                     'message': 'Confirmation code does not match or expired!'
                 },
                 status=status.HTTP_400_BAD_REQUEST)
+
