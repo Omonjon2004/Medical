@@ -38,10 +38,10 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
                 if selected_date < timezone.localtime(timezone.now()).date():
                     raise serializers.ValidationError("Sana hozirgi kunga yoki undan keyingi bo'lishi kerak.")
 
-                # Filter appointment slots by doctor and selected date
                 slots = AppointmentSlot.objects.filter(
                     doctor=obj,
-                    date=selected_date
+                    date=selected_date,
+                    is_available=False  # Only include unavailable slots
                 )
 
                 if slots.exists():
