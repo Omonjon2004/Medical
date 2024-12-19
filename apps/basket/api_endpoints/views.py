@@ -29,14 +29,14 @@ class AddToBasketView(APIView):
             total_price = 0
 
             for item in medications_data:
-                medication_name = item['medication_name']
+                medication_id = item['medication_id']
                 quantity = item['quantity']
 
                 try:
-                    medication = Medications.objects.get(name=medication_name)
+                    medication = Medications.objects.get(id=medication_id)
                 except Medications.DoesNotExist:
                     return Response(
-                        data={"error": f"""Medication '{medication_name}' 
+                        data={"error": f"""Medication '{medication_id}' 
                         is not available in the database."""},
                         status=status.HTTP_400_BAD_REQUEST
                     )
@@ -44,7 +44,7 @@ class AddToBasketView(APIView):
                 if medication.stock_quantity < quantity:
                     return Response(
                         data={"error": f"""Not enough stock for 
-                        '{medication_name}'. Available: {medication.stock_quantity}"""},
+                        '{medication_id}'. Available: {medication.stock_quantity}"""},
                         status=status.HTTP_400_BAD_REQUEST
                     )
 
@@ -58,7 +58,7 @@ class AddToBasketView(APIView):
                 total_price += item_total_price
 
                 response_data.append({
-                    "medication_name": medication.name,
+                    "medication_id": medication.name,
                     "quantity": quantity,
                     "price": medication.price,
                     "total_price": item_total_price

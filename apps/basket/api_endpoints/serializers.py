@@ -23,12 +23,12 @@ class MedicationSerializer(serializers.ModelSerializer):
 
 
 class BasketItemSerializer(serializers.Serializer):
-    medication_name = serializers.CharField()
+    medication_id = serializers.IntegerField()
     quantity = serializers.IntegerField(min_value=1)
 
 
 class BasketResponseSerializer(serializers.Serializer):
-    medication_name = serializers.CharField()
+    medication_id = serializers.IntegerField()
     quantity = serializers.IntegerField()
     price = serializers.FloatField()
     total_price = serializers.FloatField()
@@ -39,12 +39,12 @@ class BasketCreateSerializer(serializers.Serializer):
 
 
 class BasketItemDetailSerializer(serializers.ModelSerializer):
-    medication_name = serializers.CharField(source="medication.name")
+    medication_id = serializers.IntegerField(source="medication.id")
     price = serializers.FloatField(source="medication.price")
 
     class Meta:
         model = BasketItem
-        fields = ("medication_name", "quantity", "price")
+        fields = ("medication_id", "quantity", "price")
 
 
 class BasketDetailSerializer(serializers.ModelSerializer):

@@ -8,7 +8,8 @@ class DoctorCreateSerializer(serializers.ModelSerializer):
         fields = (
             'specialization',
             'experience_years',
-            'ratings',
+            'total_rating',
+            'rating_count',
             'bio',
             'created_at',
             'updated_at',
@@ -17,6 +18,9 @@ class DoctorCreateSerializer(serializers.ModelSerializer):
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
             'user': {'read_only': True},
+            'total_rating': {'read_only': True},
+            'rating_count': {'read_only': True},
+
         }
 
     def create(self, validated_data):
@@ -34,7 +38,8 @@ class DoctorUpdateSerializer(serializers.ModelSerializer):
             'user',
             'specialization',
             'experience_years',
-            'ratings',
+            'total_rating',
+            'rating_count',
             'bio',
             'created_at',
             'updated_at',
@@ -43,9 +48,9 @@ class DoctorUpdateSerializer(serializers.ModelSerializer):
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
             'user': {'read_only': True},
-            'ratings': {'read_only': True},
+            'total_rating': {'read_only': True},
+            'rating_count': {'read_only': True},
         }
-
 
 
 class DoctorListSerializer(serializers.ModelSerializer):
@@ -55,7 +60,15 @@ class DoctorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Doctors
-        fields = ['id', 'full_name', 'specialization', 'rating_count','total_rating']
+        fields = ['id',
+                  'full_name',
+                  'specialization',
+                  'rating_count',
+                  'total_rating'
+                  ]
+    def get_full_name(self, obj):
+        return obj.user.full_name
+
 
 class DoctorDetailSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()

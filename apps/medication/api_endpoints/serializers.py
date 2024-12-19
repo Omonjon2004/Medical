@@ -24,6 +24,8 @@ class MedicationSerializer(serializers.ModelSerializer):
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
             'id': {'read_only': True},
+            'total_rating': {'read_only': True},
+            'rating_count': {'read_only': True},
         }
 
 class MedicationRatingSerializer(serializers.ModelSerializer):
