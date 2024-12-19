@@ -1,11 +1,12 @@
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import AppointmentCreateSerializer
 
 
 class AppointmentCreateViewSet(viewsets.ViewSet):
-
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(
         request_body=AppointmentCreateSerializer,
     )
