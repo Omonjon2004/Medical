@@ -19,8 +19,7 @@ class AppointmentCreateViewSet(viewsets.ViewSet):
             appointment = serializer.save()
             return Response(
                 {
-                    "detail": "Tayinlash muvaffaqiyatli yaratildi.",
-                    "appointment": AppointmentCreateSerializer(appointment).data
+                    "detail": "Tayinlash muvaffaqiyatli yaratildi."
                 },
                 status=status.HTTP_201_CREATED
             )
