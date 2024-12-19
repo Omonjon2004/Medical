@@ -2,7 +2,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets,status
 from rest_framework.generics import (
     CreateAPIView,  UpdateAPIView, DestroyAPIView)
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -18,7 +18,7 @@ get_queryset = Doctors.objects.all()
 class DoctorCreateAPIView(CreateAPIView):
     serializer_class = DoctorCreateSerializer
     queryset = Doctors.objects.all()
-    permission_classes = [IsDoctorReadOnly]
+    permission_classes = [IsAdminUser]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -27,7 +27,7 @@ class DoctorCreateAPIView(CreateAPIView):
 class DoctorUpdateAPIView(UpdateAPIView):
     serializer_class = DoctorUpdateSerializer
     queryset = get_queryset
-    permission_classes = [IsDoctorReadOnly]
+    permission_classes = [IsAdminUser]
 
 
 
@@ -42,7 +42,7 @@ class DoctorListAPIView(viewsets.ReadOnlyModelViewSet):
 class DoctorDestroyAPIView(DestroyAPIView):
     serializer_class = DoctorDetailSerializer
     queryset = get_queryset
-    permission_classes = [IsDoctorReadOnly]
+    permission_classes = [IsAdminUser]
 
 class DoctorRatingView(APIView):
     permission_classes = [IsAuthenticated]

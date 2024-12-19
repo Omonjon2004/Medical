@@ -1,6 +1,7 @@
 from django.contrib.postgres.search import TrigramSimilarity
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet
 
 from apps.account_.api_endpoints.users.serializers import UserSerializer
@@ -11,7 +12,7 @@ from config.permissions import IsAdminReadOnly
 class UsersModelViewSet(ModelViewSet):
     queryset = Users.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAdminReadOnly]
+    permission_classes = (IsAdminUser,)
 
     def get_queryset(self):
         queryset = super().get_queryset()
