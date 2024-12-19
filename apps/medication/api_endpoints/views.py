@@ -13,7 +13,7 @@ from config.permissions import IsAdminReadOnly
 
 
 class MedicationUpdateAPIView(APIView):
-    permission_classes = (IsAdminReadOnly,)
+    permission_classes = (IsAdminUser,)
     serializer_class = MedicationSerializer
 
     @swagger_auto_schema(
